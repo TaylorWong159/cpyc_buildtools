@@ -1,0 +1,21 @@
+{% import "macros/section.tex.j2" as section %}
+
+{% macro render(document) %}
+\title{ {{- document.title | tex -}} }
+\author{ {{- document.authors | tex -}} }
+\date{}
+\maketitle
+{{ document.description | tex }}
+\hrulefill
+\subsection*{Contents:}
+\begin{enumerate}
+{% for s in document.sections %}
+\item {{ s.title | tex }}
+{% endfor %}
+\end{enumerate}
+
+{% for s in document.sections %}
+\newpage
+{{ section.render(s) }}
+{% endfor %}
+{% endmacro %}

@@ -1,0 +1,16 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{parskip}
+
+{% import "macros/section.tex.j2" as section %}
+
+\begin{document}
+
+{{ section.render(data) }}
+
+\end{document}

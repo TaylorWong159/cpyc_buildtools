@@ -1,0 +1,10 @@
+{% macro render(entry) %}
+\hrulefill
+\section*{ {{- entry.title | tex -}} }
+{{ entry.description | tex }}
+\subsection*{md5sum: {{ entry.hash | tex }}}
+\hrulefill
+\begin{verbatim}
+{{ entry.source }}
+\end{verbatim}
+{% endmacro %}

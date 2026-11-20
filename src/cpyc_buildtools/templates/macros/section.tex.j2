@@ -1,0 +1,18 @@
+{% import "macros/entry.tex.j2" as entry %}
+
+{% macro render(section) %}
+\hrulefill
+\section*{ {{- section.title | tex -}} }
+{{ section.description | tex }}\\
+\hrulefill
+\subsection*{Contents:}
+\begin{enumerate}
+{% for e in section.entries %}
+    \item {{ e.title | tex }}
+{% endfor %}
+\end{enumerate}
+{% for e in section.entries %}
+\newpage
+{{ entry.render(e) }}
+{% endfor %}
+{% endmacro %}
