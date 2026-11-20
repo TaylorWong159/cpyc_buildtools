@@ -1,7 +1,7 @@
 {% macro render(entry) %}
 \hrulefill
 \section*{ {{- entry.title | tex -}} }
-{{ entry.description | tex }}
+{{ entry.description }}
 \subsection*{md5sum: {{ entry.hash | tex }}}
 \hrulefill
 \begin{verbatim}

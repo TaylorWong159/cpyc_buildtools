@@ -3,7 +3,7 @@
 {% macro render(section) %}
 \hrulefill
 \section*{ {{- section.title | tex -}} }
-{{ section.description | tex }}\\
+{{ section.description }}\\
 \hrulefill
 \subsection*{Contents:}
 \begin{enumerate}
