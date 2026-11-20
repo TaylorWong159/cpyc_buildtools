@@ -9,10 +9,11 @@ class DocumentSpec(TypedDict):
     sections: list[SectionSpec]
 
 class Document:
-    def __init__(self, spec: DocumentSpec, *, minimal: bool = False) -> None:
+    def __init__(self, spec: DocumentSpec) -> None:
         self.title: str = spec['title']
         self.authors: str = ', '.join(spec['authors'])
+        self.path: str = spec['path']
         self.sections: list[Section] = [
-            Section(entry, spec['path'], minimal=minimal)
+            Section(entry, self.path)
             for entry in spec['sections']
         ]

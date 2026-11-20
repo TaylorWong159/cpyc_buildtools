@@ -1,11 +1,13 @@
 {% import "macros/section.tex.j2" as section %}
 
-{% macro render(document) %}
+{% macro render(document, minimal) %}
 \title{ {{- document.title | tex -}} }
 \author{ {{- document.authors | tex -}} }
 \date{}
 \maketitle
+{% if not minimal %}
 {{ document.description }}
+{% endif %}
 \hrulefill
 \subsection*{Contents:}
 \begin{enumerate}
@@ -16,6 +18,6 @@
 
 {% for s in document.sections %}
 \newpage
-{{ section.render(s) }}
+{{ section.render(s, minimal) }}
 {% endfor %}
 {% endmacro %}

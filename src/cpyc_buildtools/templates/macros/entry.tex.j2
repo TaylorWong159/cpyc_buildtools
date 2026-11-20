@@ -1,8 +1,9 @@
-{% macro render(entry) %}
+{% macro render(entry, minimal) %}
 \hrulefill
-\section*{ {{- entry.title | tex -}} }
+\section*{ {{- entry.title | tex }} ({{ entry.hash | tex }}) }
+{% if not minimal %}
 {{ entry.description }}
-\subsection*{md5sum: {{ entry.hash | tex }}}
+{% endif %}
 \hrulefill
 \begin{verbatim}
 {{ entry.source }}

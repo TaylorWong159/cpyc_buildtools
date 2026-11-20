@@ -2,7 +2,7 @@ import os
 import subprocess
 
 class Compiler:
-    def __init__(self, output_dir: str):
+    def __init__(self, output_dir: str) -> None:
         self.output_dir = output_dir
 
     def compile(self, latex: str, name: str) -> str:

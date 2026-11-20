@@ -11,16 +11,12 @@ class SectionSpec(TypedDict):
     entries: list[EntrySpec]
 
 class Section:
-    def __init__(self, spec: SectionSpec, document_path: str, *, minimal: bool = False) -> None:
+    def __init__(self, spec: SectionSpec, document_path: str) -> None:
         self.title: str = spec['title']
-
-        path = os.path.join(document_path, spec['path'])
-        if not minimal:
-            with open(os.path.join(path, spec['description']), 'r', encoding='utf-8') as f:
-                self.description = sanitize(f.read())
-        else:
-            self.description = ''
+        self.path: str = os.path.join(document_path, spec['path'])
+        with open(os.path.join(self.path, spec['description']), 'r', encoding='utf-8') as f:
+            self.description = sanitize(f.read())
         self.entries: list[Entry] = [
-            Entry(entry, path, minimal=minimal)
+            Entry(entry, self.path)
             for entry in spec['entries']
         ]

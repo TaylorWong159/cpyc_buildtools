@@ -32,15 +32,15 @@ class Renderer:
         )
         self.env.filters['tex'] = latex_escape
 
-    def render(self, template_name: str, data: object) -> str:
+    def render(self, template_name: str, data: object, minimal: bool = False) -> str:
         template = self.env.get_template(template_name)
-        return template.render(data=data)
+        return template.render(data=data, minimal=minimal)
 
-    def render_entry(self, entry: Entry) -> str:
-        return self.render('layouts/entry.tex.j2', entry)
+    def render_entry(self, entry: Entry, minimal: bool = False) -> str:
+        return self.render('layouts/entry.tex.j2', entry, minimal)
 
-    def render_section(self, section: Section) -> str:
-        return self.render('layouts/section.tex.j2', section)
+    def render_section(self, section: Section, minimal: bool = False) -> str:
+        return self.render('layouts/section.tex.j2', section, minimal)
 
-    def render_document(self, document: Document) -> str:
-        return self.render('layouts/document.tex.j2', document)
+    def render_document(self, document: Document, minimal: bool = False) -> str:
+        return self.render('layouts/document.tex.j2', document, minimal)

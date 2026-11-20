@@ -1,9 +1,11 @@
 {% import "macros/entry.tex.j2" as entry %}
 
-{% macro render(section) %}
+{% macro render(section, minimal) %}
 \hrulefill
 \section*{ {{- section.title | tex -}} }
-{{ section.description }}\\
+{% if not minimal %}
+{{ section.description }}
+{% endif %}
 \hrulefill
 \subsection*{Contents:}
 \begin{enumerate}
@@ -13,6 +15,6 @@
 \end{enumerate}
 {% for e in section.entries %}
 \newpage
-{{ entry.render(e) }}
+{{ entry.render(e, minimal) }}
 {% endfor %}
 {% endmacro %}
