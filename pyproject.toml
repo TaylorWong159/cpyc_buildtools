@@ -24,4 +24,4 @@ where = ["src"]
 cpyc_buildtools = ["templates/*", "templates/**/*"]
 
 [project.scripts]
-cpyc_build = "cpyc_buildtools.main:main"
+build_cpyc = "cpyc_buildtools.main:main"
