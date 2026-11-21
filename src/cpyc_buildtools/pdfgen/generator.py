@@ -7,7 +7,7 @@ class PDFGenerator:
         self,
         template_dir: str,
         output_dir: str,
-        preamble: str | None = None,
+        preamble: str,
     ) -> None:
         self.renderer = Renderer(
             template_dir,

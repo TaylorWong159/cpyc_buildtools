@@ -8,7 +8,6 @@ from typing import NamedTuple
 
 from cpyc_buildtools.models import Document
 from cpyc_buildtools.pdfgen import PDFGenerator
-from cpyc_buildtools.pdfgen.renderer import DEFAULT_PREAMBLE
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -19,19 +18,26 @@ logging.basicConfig(
 TEMPLATES = resources.files('cpyc_buildtools').joinpath('templates')
 
 class Args(NamedTuple):
-    document: str
+    config: str
+    preamble: str
     build: str
     minimal: bool
     scope: str | None
-    preamble: str | None
     tex_only: bool
 
 def parse_args() -> Args:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        'document',
+        '-c', '--config',
         type=str,
-        help='The json document file to build'
+        default='cpyc.json',
+        help='The json document config file to build'
+    )
+    parser.add_argument(
+        '-p', '--preamble',
+        type=str,
+        default='cpyc_preamble.tex',
+        help='Use a specific preamble tex file (section in the tex prior to the \\begin{document})'
     )
     parser.add_argument(
         '-b', '--build',
@@ -57,34 +63,28 @@ def parse_args() -> Args:
         action='store_true',
         help='Build the minimized version'
     )
-    parser.add_argument(
-        '-p', '--preamble',
-        type=str,
-        help=(
-            'Use a specific preamble (section in the tex prior to the \\begin{document})\n'
-            f'default:\n{DEFAULT_PREAMBLE}'
-        )
-    )
     args = parser.parse_args()
     return Args(
-        args.document,
+        args.config,
+        args.preamble,
         args.build,
         args.minimal,
         args.scope if args.scope is not None else None,
-        args.preamble,
         args.tex_only
     )
 
 def build(
-    doc_file: str,
+    config_file: str,
+    preamble_file: str,
     build: str = 'build',
     minimal: bool = False,
     scope: str | None = None,
-    preamble: str | None = None,
     tex_only: bool = False,
 ) -> int:
-    with open(doc_file, 'r', encoding='utf8') as f:
-        doc = Document(json.load(f))
+    with open(config_file, 'r', encoding='utf8') as f:
+        document = Document(json.load(f))
+    with open(preamble_file, 'r', encoding='utf8') as f:
+        preamble = f.read()
     with resources.as_file(TEMPLATES) as templates:
         generator = PDFGenerator(
             template_dir=str(templates),
@@ -92,14 +92,14 @@ def build(
             preamble=preamble
         )
     if scope is None:
-        generator.build_document(doc, minimal=minimal, tex_only=tex_only)
+        generator.build_document(document, minimal=minimal, tex_only=tex_only)
         return 0
     section, entry, *_ = scope.split('/', maxsplit=1) + [None, None]
     if section is None:
         logging.error('Invalid scope "%s"', scope)
         return 1
-    for sec in doc.sections:
-        if sec.path == os.path.join(doc.path, section):
+    for sec in document.sections:
+        if sec.path == os.path.join(document.path, section):
             if entry is None:
                 generator.build_section(sec, minimal=minimal, tex_only=tex_only)
                 return 0

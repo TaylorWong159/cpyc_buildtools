@@ -22,20 +22,11 @@ def latex_escape(value: object) -> str:
         for char in str(value)
     )
 
-DEFAULT_PREAMBLE: str = r"""
-\documentclass{article}
-\usepackage[margin=0.5in]{geometry}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{booktabs}
-\usepackage{graphicx}
-\usepackage{parskip}
-"""
 class Renderer:
     def __init__(
         self,
         template_dir: str,
-        preamble: str | None = None
+        preamble: str
     ) -> None:
         self.env = Environment(
             loader=FileSystemLoader(template_dir),
@@ -44,7 +35,7 @@ class Renderer:
             lstrip_blocks=True,
         )
         self.env.filters['tex'] = latex_escape # pyright: ignore[reportUnknownMemberType]
-        self.preamble: str = preamble if preamble is not None else DEFAULT_PREAMBLE
+        self.preamble: str = preamble
 
     def render(self, template_name: str, data: object, minimal: bool = False) -> str:
         template = self.env.get_template(template_name)
